@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>SoftPhone</title>
+  </head>
+  <body>
+    <div class="content">
+      <div id="dv-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1>Fale conosco através dos nossos canais</h1>
+          </div>
+          <div class="modal-body">
+            Recepção: -> 100
+            <br>
+            <hr>
+            Setor de TI: -> 200
+            <br>
+            <hr>
+            Gabinete: -> 300
+            <br>
+            <hr>
+            Almoxarifado: -> 400
+            <br>
+            <hr>
+            Setor de Contratações: -> 500
+            <br>
+            <hr>
+            Coordenação de Assistência Estudantil (C.A.E): -> 600
+            <br>
+            <hr>
+            Coordenação de Controle Acadêmico (C.C.A): -> 700
+            <hr><br><br>
+            <audio id="remoteAudio" controls hidden></audio>
+            <div id="inputRamal">
+              <select id="discagem">
+              <option value="100">100</option>200</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+              <option value="500">500</option>
+              <option value="600">600</option>
+              <option value="700">700</option> </select>
+            <input id="checkRegistro" type="checkbox" name="checkRegistro"><label>Registrado</label>
+            <div class="ledStatus">
+              <div id="led" name="led"></div>
+              <label id="status">Status</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <hr>
+          <button id="btn-ligar" onclick="call()" class="btn-footer">Ligar</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html></div><script src="sip-0.20.0.js"></script><script src="script.js"></script><script src="simpleUser.js"></script><script>
+var server_ip = "10.0.0.159"
+var server = `ws://${server_ip}:8088/ws`;
+var aor = `sip:1000@${server_ip}`;
+var authorizationUsername = '1000';
+var authorizationPassword = '7777';
+
+var delegate = {
+  onCallReceived: function () {
+    return __awaiter(void 0, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            console.log('Chamada recebida!');
+            if (window.confirm("Atender")) {
+              return [4, simpleUser.answer()];
+            } else {
+              return [4];
+            }
+          case 1: _a.sent();
+            return [2];
+        }
+      });
+    });
+  }
+};
+
+var options = {
+  aor: aor,
+  delegate: delegate,
+  media: {
+    remote: {
+      audio: getAudioElement("remoteAudio")
+    }
+  },
+  userAgentOptions: {
+    authorizationPassword: authorizationPassword,
+    authorizationUsername: authorizationUsername
+  }
+};
+var simpleUser = new SIP.Web.SimpleUser(server, options);
+simpleUser.connect().then(() => document.getElementById('checkConexao').checked = true)
+simpleUser.register().then(() => document.getElementById('checkRegistro').checked = true, testeConexao());
+
+function call() {
+  var call_number = parseInt(document.getElementById('discagem').value);
+  var campo = document.getElementById('discagem')
+  var destination = `sip:${call_number}@${server_ip}`;
+  simpleUser.call(destination);
+  console.log(call_number)
+}
+function hangup() {
+  simpleUser.hangup();
+}
+function answer() {
+  simpleUser.answer();
+  wait(60);
+  if (wait < 60) {
+    simpleUser.hangup();
+  }
+}
+function testeConexao() {
+  var status = document.getElementById('checkRegistro').checked;
+  let corLed = document.getElementById('led');
+  if (status === true) {corLed.style.backgroundColor = '#12df29'} else {corLed.style.backgroundColor = '#ec1f13'
+  }
+}</script></body></html>
