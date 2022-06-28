@@ -1,0 +1,103 @@
+;WebRTC
+
+[webrtc-transporte]
+type = transport
+protocol = ws
+bind = 0.0.0.0:8089
+
+[1000]
+type = auth
+auth_type = userpass
+username = 1000
+password = 7777
+
+[1000]
+type = aor
+max_contacts = 2
+
+[1000]
+type = endpoint
+transport = webrtc-transporte
+context = webrtc
+disallow = all
+allow = ulaw,opus,alaw
+webrtc = yes
+aors = 1000
+;auth = 1000
+
+;----------------------------------------------
+
+[camada_transport]
+type = transport
+protocol = udp
+bind = 0.0.0.0
+
+[auth_padrao]
+type = auth
+auth_type = userpass
+username = ifce
+password = 9999
+
+[aor_padrao](!)
+type = aor
+max_contacts = 1
+
+[endpoint_padrao](!)
+type = endpoint
+context = campus
+disallow = all
+allow = gsm
+transport = camada_transport
+auth = auth_padrao
+trust_id_outbound = yes
+language = pt-br
+
+
+;--------------------------------------------
+
+[100](endpoint_padrao)
+aors = 100
+callerid = <Recepcao>
+[100](aor_padrao)
+
+;--------------------------------------------
+
+[200](endpoint_padrao)
+aors = 200
+callerid = <TI>
+[200](aor_padrao)
+
+;--------------------------------------------
+
+[300](endpoint_padrao)
+aors = 300
+callerid = <Gabinete>
+[300](aor_padrao)
+
+;--------------------------------------------
+
+[400](endpoint_padrao)
+aors = 400
+callerid = <Almoxarifado>
+[400](aor_padrao)
+
+;--------------------------------------------
+
+[500](endpoint_padrao)
+aors = 500
+callerid = <Contratações>
+[500](aor_padrao)
+
+;--------------------------------------------
+
+[600](endpoint_padrao)
+aors = 600
+callerid = <CAE>
+[600](aor_padrao)
+
+;--------------------------------------------
+
+[700](endpoint_padrao)
+aors = 700
+callerid = <CCA>
+[700](aor_padrao)

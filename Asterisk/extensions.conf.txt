@@ -1,0 +1,25 @@
+[webrtc]
+
+exten => 1000,1,Verbose(2,Ligação de ${CALLERID(num)} para ${EXTEN})
+same = n,Dial(PJSIP/1000)
+same = n,Hangup()
+
+exten = 100,1,Verbose(2,Ligação de ${CALLERID(num)} para ${EXTEN})
+same = n,Dial(PJSIP/100)
+same = n,Hangup()
+
+exten = _[2-7]00,1,Verbose(2,Ligação de ${CALLERID(num)} para ${EXTEN})
+same = n,Dial(PJSIP/100)
+same = n,Hangup()
+
+[campus]
+
+exten = 100,1,Verbose(2,Ligação de ${CALLERID(num)} para ${EXTEN})
+same = n,Dial(PJSIP/100)
+same = n,Hangup()
+
+exten = _[2-7]00,1,Verbose(2,Ligação de ${CALLERID(num)} para ${EXTEN})
+same = n,Dial(PJSIP/100)
+same = n,Hangup()
+
+exten => 1000,1,Goto(webrtc,1000,1)
